@@ -1,0 +1,695 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<link rel="stylesheet" type="text/css" media="screen" href="path/to/file.css" /> 
+<script type="text/javascript" src="path/to/anotherFile.js"></script> 
+
+
+ .box {    min-height:500px;
+  height:auto !important;
+   height:500px;
+}//最小高度
+
+
+$ $hash_ref = $dbh->selectrow_hashref($statement);
+$hash_ref->{code} 
+
+
+  $ary_ref  = $dbh->selectcol_arrayref($statement);
+  
+  
+  $ary_ref->[0] = 
+  
+  $value = 
+  
+  $ary_ref  = $dbh->do("update table set value = '$value' where id = ? or id = ?", undef, $value, $id, $id2);
+  
+  for my $row(@$ary_ref){
+    $row->[0] = $id;
+      $row->[1] = 
+  }
+  
+  $hash_ref = $dbh->selectall_hashref($sql, 'id');
+  
+  $hash_ref = {
+   1  => {id => 1, start_time => xxxx}
+    2 => {id => 2, xxxx}
+    .....
+   }
+   
+   for my $key(sort keys %$hash_ref){
+    my $id = $hash_ref->{$key}->{id};
+    
+   
+    }
+    
+    
+    cpan.org  //perl网站
+开始看O'REILLY的"小骆驼书"了,读书记笔记是个好习惯啊,原来都用笔来记,有blog了还是发挥一下作用嘛!
+
+
+一.简介
+Perl就像骆驼,长得有点丑陋,但是他们努力工作,即使是在严酷的环境下也一样.骆驼能在种种不利条件下帮你把事情搞定,即使他们长得不美,而且气味更糟,有时候还要向你吐口水.
+CPAN是Perl综合典藏网
+Perl官方Usenet新闻组位于comp.lang.perl.*这一级.
+
+
+二.标量数据
+Perl用标量指称单件事物.在Perl中数值和字符串都代表单件事物的标量.
+直接量
+直接量是数值在Perl代码中的表现方式,直接写在代码中的数据.
+1.数值直接量
+整数和浮点数在Perl内部一律采用"双精度浮点数"(就是用来编译Perl的C编译器的double类型)进行运算.
+  数值操作符 + - * / **
+2.字符串直接量
+字符串最短为不含字符的空字符串,最长会填满所有内存,遵循Perl的"无内置限制"原则.且空字符串没有特殊意义,不用空字符表示字符结尾.
+单引号内字符 'string'
+所有字符代表它本身. (除 \' \\ ,只有反斜杠后面是单引号和反斜杠是,才具有特殊意义)
+双引号内字符 "string"
+反斜杠都具有特殊意义,且支持$和@的变量替换,不支持%的散列替换.
+字符串操作符 . (点号 连接两个字符串)
+             x (小写字符x 表示将左边的操作数与它本身重复连接,次数由右边操作数决定)
+字符串与数字之间的转换根据操作符决定.
+标量变量
+变量是一个容器的名称,可以存储一个或多个值.
+标量变量存储标量值,名称以美元符号($)开头.(注意于与shell区别,shell里取值用$,赋值时不能用)
+在双引号内的变量都要转换为变量的值.
+比较操作符(部分同shell)
+比较      数值     字符串
+相等       ==      eq
+不等       !=      ne
+小于       <       lt
+大于       >       gt
+小于等于   <=       le
+大于等于   >=       ge 
+布尔值
+在数值情况下,0为假,其他所有为真
+在字符情况下,空字符''和'0'为假,其他所有为真
+如果不适字符和数值,转换为数字和字符在判断
+if和while控制结构
+和C语法一样,只有一点特别注意:程序块必须用花括号{}括起.
+取得用户输入
+<STDIN>  从标准输入读入一行文字,直到换行符为止.
+chomp()操作符
+移出字符串结尾的换行符
+undef值
+标量变量首次赋值之前的初始值就是undef(未定义).当成数字假设为0,当成字符串假设为'',但undef既不是数字也不是字符,而是另一种类型的标量值.
+defined()函数
+该函数可以判断字符串是空或则undef.
+如<STDIN>遇到文件结束(EOF)就会返回undef
+e.g.
+#!perl
+$sting=<STDIN>;
+chomp($string);
+if ( defined($string) )
+{
+   print " This input is $string";
+}
+else
+{
+  print "EOF";
+}
+如果直接在终端键入 Ctrl+D, 就表示文件结束,$string将undef(未定义),所以结果将打印 EOF.
+
+
+三.列表与数组
+正如标量代表单数,列表和数组在Perl里代表复数.
+列表值标量的有序集合,数组是存储列表的变量.
+数组
+数组元素以连续的整数来编号,从0开始.  $array[0]="ty"
+$#array表示最后一个元素的索引值.
+负数数组索引值.-1表示最后一个索引.  $array[-1]==$array[$#array]
+@array表示引用整个数组.
+列表
+列表直接值是圆括号内一串以逗号分隔的值.  (1,2,3)
+范围操作符 ..  从左边的标量到右边,每次加1,产生一连串数值. (1..4) == (1,2,3,4)
+qw缩写 qw/ ty point linuxty / == ("ty","point","lnuxty")
+      qw里的字符串当成单引号内的来处理.除了/为界定符,还支持!,#,(),<>,[]
+赋值
+($a,$b,$c)={"a","b","c");
+($array[0],$array[1],$array[2])=qw/a,b,c/;  # 等同于 @array=qw/a,b,c/
+@array=1..4;  #包含1,2,3,4四个元素的数组.
+pop和push操作符
+pop取出数组最后一个元素并将它返回,如果数组为空,返回undef.  $tmp=pop(@array)
+push添加一个(或则一串)元素到数组最后 push(@array,1..3)  添加1,2,3三个元素到数组最后
+shift和unshift操作符
+shift与pop相反,从数组开始取出并返回它,如果数组为空,返回undef.
+unshift与push相反,从添加一个(或一串)元素到数组开始处.
+双引号内替换数组
+和标量一样,数组值可以被替换到双引号内的字符串中,数组中的相邻元素回自动添加空格作为分隔符.
+foreach控制结构
+循环处理列表的值,每次对一个值执行操作.
+foreach $tmp (qw/a b c/) {
+  print "$tmp\n";
+}
+例中的控制变量$tmp是列表元素本身,修改它就会修改相应元素值.但当循环结束时,这个值恢复到循环前的值,如果循环前没有赋值,就还是undef.
+默认变量 $_
+foreach如果省去了开头的控制变量,使用默认值 $_
+Perl中,当没告知使用那个变量和数值时,都会自动使用这个默认值.
+reverse操作符
+读取列表的值并依相反的次序返回该列表,不改变参数本身.
+@array=1..3;   # 1,2,3
+@array=reverse(@array);  # 3,2,1
+sort操作符
+读取列表的值进行排序,默认为ASCII编码顺序,不改变参数本身.
+@array=sort(@array);
+标量与列表上下文
+书上说是本书最重要的一节.
+同一个表达式.出现在不同的位置,就会有不同的意思.
+在Perl中,同一表达式出现在标量上下文和列表上下文中将作不同的解释.
+@people=dw/ty point linuxty/;
+@list=@people; 表示3个字符串的列表 (列表上下文)
+$n=@people;  表示数字3 (标量上下文)
+1.在标量上下文使用了产生列表的表达式,将产生与原来不一样的结果,具体就要看说明文档,没有具体的标准,每个表达式都有不同的解释.
+2.在列表上下文使用了产生标量的表达式,则该标量值自动转换为含有单一元素的列表.
+强制指定标量上下文 scalar 假函数. 
+print scalar @people ;  #输出数字3
+print @people;          #输出人名
+
+
+四.子例程
+子例程即为用户自己定义的函数.
+定义
+sub max {
+}
+调用子例程在名称前加&  &fun
+子例程可以使用任何的全局变量.
+返回值
+Perl最后执行的表达式作为子例程返回值.
+参数
+传递参数列表到子例程,只要在子例程调用的后面加上括号括住的列表表达式就可 $n=&max(1,2);
+Perl会自动把参数列表存储到名为 @_ 的数组变量中. 上例中 $_[0]==1 $_[1]==2
+私有变量
+my操作符创建作用范围为所属块的私有变量  my($n,$m)
+return操作符
+马上返回一个值,不执行其余代码.
+use strict 编译命令
+用在代码中,表示愿意接受一些限制,强制使用一些良好的程序语言规规则.
+e.g.
+#!perl
+#find the max number
+use strict;
+sub max {
+  my($my_max)=shift @_;
+  foreach (@_) {
+    if($_>$my_max) {
+      $my_max=$_;
+    }
+  }
+  $my_max;
+}
+$max=&max(2,6,4,5,7);
+print $max;
+
+
+五.输入与输出
+读取标准输入
+while(defined($line=<STDIN>) {
+print "$line";
+}
+遇到文件结束,<STDIN>操作符将返回undef,即可方便跳出循环.
+简写:
+while (<STDIN>) {
+print "$_" ;
+}
+foreach( <STDIN> )|
+print "$_";
+}
+在while中.每次只读取一行,循环读取.在foreach中,因为<STDIN>操作符在列表上下文中执行,所以会全部读取输入为列表,然后在开始循环,如果输入很大,将占据很大的内存空间.所以一般都用while,每次处理一行.
+钻石操作符
+<> 程序在处理调用参数时,提供类似于Unix工具程序的用法,把参数作为文件处理.
+@ARGV数组为Perl事先建立的特殊数组,内容是命令行参数所组成的列表.钻石操作符<>就是通过这个数组调用参数.当数组为空列表或连字符-,改用标准输入流;否则使用数组里的文件列表.
+while (<>){
+print "$_";
+}
+输出命令行参数列表中每个文件中的所有行,每个文件间没有隔行.直到所有输出的结尾,返回undef.
+输出到标准输出
+print 读取一个列表中的所有值,并把每个项目送到标准输出,且在项目之间不会加入其他字符.
+print @array;
+print "@array";
+上面为两种不同的输出.
+第一个为输出数组,逐个输出每个项目,且之间没有空格等其他字符.
+第二个为替换数组,只输出一个项目,项目内容为数组中的每个项目,且每个之间用空格(默认值)隔开.
+规测:如果print的调用看起来像函数调用,他就是函数调用.即没有括号的时候是列表操作符,输出后面所有东西;有括号就是一个函数调用,只将括号里的输出.
+print (1+2)*5;
+上例将输出3,因为 print (1+2)是函数,首先就输出3,然后print返回1,在乘以5,然后丢掉这项乘积.
+printf 格式化输出结果.
+printf "the items are:\n".("%d\n" x @array),@array;
+上例之酷,可以输出一个数组中的所有元素.第一个标量上下文取@array的个数,第二个列表上下文取@array的内容.
+文件句柄
+文件句柄就是Perl程序里的一个名称,代表Perl进程与外界之间的输入/输出联系.
+打开文件句柄(同shell的重定向)
+open CONFIG,"<file";  #打开名为CONFIG的文件句柄联系到文件file.
+open CONFIG,"file";  #同上,默认行为即为<符号
+open CONFIG,">file";  #打开文件句柄并输出到新文件file.
+open CONFIG,">>file";  #打开文件句柄并添加到file文件后面
+关闭文件句柄
+close CONFIG;  #表示对该数据流的处理已经结束,把数据写入硬盘.
+die函数和warn函数
+die函数会输出你指定的信息到标准错误流里,并在非零状态下终止程序.
+warn函数跟die函数一样,但不终止程序.
+$!保留之前一次系统请求失败信息.如打开文件权限不足,文件找不到等.
+句柄使用
+从Unix读取密码文件
+#!perl
+if (! open PASSWD, "/etc/passwd") {
+  die "Cann't open file : $!";
+}
+while (<PASSEWD>) {
+}
+改变默认输出句柄
+默认输出句柄为 STDOUT
+print STDOUT "string\n";
+print "string\n";
+两者相同
+select可以改变默认文件句柄.
+select FILE;
+print "string\n";  #此时默认输出到FILE句柄中.
+特殊变量$| 当设置为1时,表示每次输出操作后,立即清空缓冲区.
+
+
+六.散列
+散列即hash,索引称为键,为互不相同的字符串.hash的键值对顺序不定,每插入一个键值对,就会重新排序.
+定义
+$hash{$key};
+引用整个散列 %hash.
+对hash赋值等于在列表上下文赋值,列表由键值对组成.
+%hash=("one",1,"two",2,"three",3);
+建立反序的散列,但要保证值无重复的,不然后面的要覆盖前面的.
+%inverse_hash=resverse %hash;
+大箭号
+大箭号=>等同与逗号,但可以使键值对关系更加明显.
+%hash=("one"=>1,"two"=>2,"three"=>3,);
+散列函数
+keys函数与values函数
+keys函数以列表形式返回散列里的所有键,values函数以列表形式返回散列里的所有值.
+my @key=keys %hash;
+my @value=values %hash;
+each函数
+以列表形式迭代返回散列里个每个键值对,最后返回空列表.
+while( ($key,$value)=each %hash) {
+}  #赋值运算的值为右边的值,所以最后的空列表为0,即退出循环.注意:此时key和value的值都为undef.
+exists函数
+查看一个键是否在散列中. if ( exists %hash{"one"} ){}
+delete函数
+从散列中移出指定的键.
+散列不支持双引号内的替换,即双引号不支持%,支持@和$替换.
+
+
+七.正则表达式
+\d  匹配一个数字
+\w  匹配任意一个字母数字或下划线
+\s  包括空格、制表、换行,回车,换页等空白字符之一,等同于[ \t\n\r\f]
+\D \W \S 表示于上面相反的匹配.
+.   小数点可以匹配除了换行符（\n）以外的任意一个字符
+^   匹配字符串首,不匹配任何字符
+$   匹配字符串尾,不匹配任何字符      ^$匹配不含字符的行
+\b  匹配一个单词边界,,不匹配任何字符
+[]  匹配括号内的任一个字符       [a-z]匹配'a'至'z'内的任一字符
+[^] 匹配不在括号内的任一字符
+{}  {n} 重复匹配n次符号前字符
+    {n,m} 重复匹配n至m次符号前字符
+    {n,}  至少重复匹配n次
+    {,m}  至多重复匹配m次
+?   重复匹配0或1次符号前字符      等同于 {0,1}
++   重复匹配1或多次符号前字符     等同于 {1,}
+*   重复匹配0或多次符号前字符     等同于 {0,}          .*  匹配零个或若干个任意字符
+()  保存匹配的字符串,依次存储在1-9号寄存器中,通过\n引用   ^(.).*\1$    匹配首尾字符相同的行
+
+
+八.以正则表达式进行匹配
+以m//进行匹配
+m//为模式匹配操作符,默认匹配$_变量,界定符可以为其他字符,当为双斜杠时可以省去m.
+/^http:\/\// 等同于 m$^http://$
+选取不同的界定符可以更加可读,易懂.
+选项修饰符
+选项修饰符字母称为标记,可以整组加到正则表达式结尾的界定符右边,改变表达式的默认行为.
+以/i进行不区分大小写的模式匹配
+/regular/i  表示匹配时不区分每个字母的大小写
+以/s来匹配任意字符
+因为点号.不能匹配换行符\n,而/s能使点号匹配任意字符.[\d\D]
+用/x加上空白
+/x修饰符使得模式里可以加上任意空白而不具有意义,使模式更好读,要匹配空白就在前加反斜杠.或则\s
+注意:在Perl里注释也代表空白,因井号#为注释标记,所以它之后的都无意义.
+要使用多个修饰符,可以接到一起使用.
+e.g.
+#perl
+if ( m{
+     ty  #什么都可以
+     .*  #什么都可以
+     po  #什么都可以
+    }six) {
+print "ok\n";
+}
+这个就是匹配 /ty.*po/si ,如果有,就输出ok.
+锚点
+锚点可以可以让模式直接匹配字符串的一个特定位按此置.
+^匹配开始 $匹配结束 
+注意:/^point$/ 会匹配 "point"与"point\n" 两个字符串.
+\b单词边界锚点,匹配\w字符的单词  . /\bpoint\b/  匹配单词 point
+绑定操作符 =~
+匹配$_只是模式匹配的默认方式,=~操作符用来改用右边的模式来匹配左边的字符串.
+默认内的内插
+正则表达式可以进行双引号形式的内插.
+my $point="ty";
+/^($pont)/ 等同于 /^ty/   ()此处可以去掉,但有时很有用处的.
+匹配变量
+()圆括号可以记忆匹配到的字符串,同上一章所讲, 变量通过$1,$2等来引用.
+匹配变量的值会保存到下次匹配成功时,也就是说失败的匹配会保存上次失败的值,成功的匹配会重设.所以这也是把模式匹配放到if和while里的部分原因.
+自动匹配变量
+$` 匹配之前的内容  $&匹配到的内容  $'匹配到之后的内容
+($`)($&)($')就表示用来匹配的整个字符串.
+优先级
+1.括号 2.量词 3.锚点 4.竖线
+模式测试程序
+#perl
+while(<>){
+     chomp;
+     if(/YOU_PATTERN/) {
+        print "Matched: | $`<$&>$' |\n";
+     } esle {
+        print "No matched : | $_ |";
+     }
+}
+
+
+九.以正则表达式处理文本
+以s///进行替换
+注意:左边部分为正则表达式,右边部分为双引号内字符串.
+s/\.gcc$/.tmp/  #此处就是换扩展名.gcc为.tmp,因为前面为正则表达式,所以要加\去掉.的特殊意义.
+以/g进行全局操作.
+注意:互不重叠.表示每次从上次匹配字符之后的地方开始重新匹配.
+大小写转换
+\U将其后字符转换为大写 \u将其后第一个转换为大写
+\L将其后字符转换为小写 \l将其后第一个转换为大写
+s/(t.*y)/\L\u$1/gi;  将匹配的字符串转换为首字大写,其余小写
+默认情况下将影响之后全部字符串.可用\E关闭大小写转换.
+以上规则还适用于双引号内的字符串.
+print "hello,\L\u$name\E,hihi\n";  #$name变量将首字大写,其余小写,\E之后将不替换.
+split操作符
+根据分隔符拆开一个字符串.
+my @array=split /:/,"a:b:c:d";  #将产生列表("a","b","c","d")
+如果想要保存分隔符,正则表达式需要用括号捕获.
+my @array=split /(:)/,"a:b:c:d";  #将产生列表("a",":","b",":","c",":","d")
+split会保留开始的空字段,而舍去结尾处的空字段.
+split默认以空白符拆开$_
+my @array=split; # 等同于 split /\s+/,$_; 有一点区别是前者省去开始的空字段.
+join函数
+作用与split相反,是把分开的片段连成一个字符串.
+my $value=join ":",("a","b","c","d"); #将产生字符串"a:b:c:d".
+注意:join的第一个参数是字符串,而不是模式.而split的第一参数是模式.
+列表上下文的m//
+在列表上下文使用模式操作匹配符m//,匹配成功,返回的列表中的值是所有内存标量的值(即用但括号括起的值),匹配不成功,返回空列表.
+my @words=($text=~/([a-z]+)/g);  #此处加了全局g,所以将把所有匹配值存入数组.
+非贪心量词
++  *  ?  {} 为贪心量词,表示最大匹配
++?  *?  ?? 为非贪心量词,表示最小匹配
+my $string=ttxxxt;
+$string=~/t.*t/;  #匹配ttxxxt
+$string=~/t.*?t/; #匹配tt
+跨行模式匹配
+^ $两个锚点默认代表字符串的头和尾,加了/m修饰符后,就表示每一行的头尾.区别主要在于字符串里面含有换行符\n的时候.
+my $test="ab\nb\n"; #此处字符串为2行
+$test=~/^b/;        #不能匹配,字符串不以b开头
+$test=~/^b/m;       #可以匹配,因为参数/m表示^限定行首,而不是字符串首.
+特殊变量$^I
+当使用钻石操作符<>读取一个文件时,如果$^I设为空字符串,将直接对文件进行操作,而当$^I不为空时,<>会把打开的文件命名为以这个字符为扩展名的新文件名,同时创建一个跟原来同名的新文件,对文件进行的操作都输入到这个新文件里面.因此,<>并没有修改最开始打开的文件,而是生成了一个同名的新文件,且留有备份.
+命令行修改文件
+perl -p -i .bak -w -e 's/ty/point/g' filename
+-p参数表示如下代码段
+while(<>){
+print;
+}
+如果想要去掉print内容,加参数-n.
+-i用来设置$^I.
+-w开启警报功能.
+-e表示后面跟的是程序代码.
+上面等同于以参数filename调用以下程序.
+#perl -w
+$^I=".bak";
+while(<>){
+s/ty/point/g;
+print;
+}
+不具记忆功能的圆括号
+(?:string)这样表示圆括号只进行分组,而不把值存入内存变量中.
+
+
+十.控制结构
+if控制结构与unless控制结构相反
+while控制结构与until控制结构相反
+控制结构简写
+上述控制结构都可简写,简写是去掉圆括号和花括号,且把修饰符后移,但执行时还是条件式先执行.
+如
+if($n<0) {
+print "$n is a good\n";
+}
+等同于
+print "$n is a good\n" if $n<0;
+for和foreach的关联
+在Perl的解析器里两个关键字等价.如果圆括号里有两个分号,就当成for循环,否则就是foreach循环.
+for(1..10) 其实是1到10的foreach循环.
+循环控制
+last操作符
+等同于c语言中的break,只能跳出一层.
+next操作符
+跳过当次循环,继续进行下一次迭代,等同于c语言中的continue.
+redo操作符
+重复执行该次迭代.
+
+
+十一.文件测试
+文件测试操作符
+
+-r
+ 对有效用户或组可读
+ 
+-w
+ 对有效用户或组可写
+-x
+ 对有效用户或组可执行
+-o
+ 为有效用户所拥有
+ 
+-R
+ 对实际用户或组可读
+-W
+ 对实际用户或组可写
+-X
+ 对实际用户或组可执行
+-O
+ 为实际用户所拥有
+ 
+-e
+ 文件存在
+ 
+-z
+ 文件存在没有内容(目录永远为假)
+ 
+-s
+ 文件存在且有内容(返回字节为单位的文件大小)
+ 
+-f
+ 文件句柄是纯文本文件
+ 
+-d
+ 文件句柄是目录
+ 
+-l
+ 文件句柄是符号链接
+ 
+-s
+ 文件句柄是socket
+ 
+-p
+ 文件句柄是管道(fifo)
+ 
+-b
+ 文件句柄为块文件
+ 
+-c
+ 文件句柄为字符文件
+ 
+-u
+ 具有setuid属性
+ 
+-g
+ 具有setgid属性
+ 
+-k
+ 设定了sticky位
+ 
+-t
+ 文件句柄为tty设备文件
+ 
+-T
+ 文件看起来像文本文件
+ 
+-B
+ 文件看起来像二进制文件
+ 
+-M
+ 上次更改到现在已经几天
+ 
+-A
+ 上次访问到现在已经几天
+ 
+-C
+ inode更改到现在几天
+ 
+stat函数和lstat函数
+这两个函数将返回含13个元素的数字列表,将包含文件的详细内容.
+my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,
+    $size,$atime,$mtime,$ctime,$blksize,$blocks)
+    =stat($filename);
+对符号链接使用stat将返回链接指向文件的信息,使用lstat将返回链接文件本身的信息.
+
+
+十二.目录操作
+Glob
+在shell中会将命令行的文件名模式扩展成所有匹配的文件名,这就称为globbing(文件名模式匹配).
+在Perl中通过glob操作符来实现.
+my @all_file=glob "*";   #数组变量将保存该目录下所有文件名,除了以点号开头的隐藏文件.
+等同于
+my @all_file=<*>;
+注意:角括号内项目如果是标识符就表示从文件句柄读取文件内容,否则就表示glob.
+my @file=<FILE>;   #表示读取文件内容
+my @file=<FILE/*>; #表示glob.
+目录句柄
+若想从目录里取得文件列表,也可以用目录句柄.
+opendir closedir readdir
+#perl
+my $dir="/etc";
+opendir DH,$dir or die "Can't open $dir : $! \n";
+foreach  $file (readdir DH) {
+print "one file in $dir is $file \n";
+}
+closedir DH;
+注意:readdir返回的文件名不包含路径,glob将返回路径加文件名.
+操作目录与文件
+chdir 改变当前目录
+unlink 移除文件,参数为列表  unlink glob "*"  #移除当前目录下文件(不包括隐藏的)
+rename "old","new" 重命名文件
+link "file","filelnk"  硬链接文件 (类似C语言中的引用)
+symlink "file","filelnk"  软链接文件 (类似C语言中的指针)
+mkdir "dir",0775   建立文件,第二参数为权限
+rmdir 移除目录,只能移除空目录.
+chmod 0775,"file"  修改权限
+chown $user,$group,"file"  修改隶属关系.用户标识符和组标识符必须用数字.
+                           getpwnam和getgrnam分别将用户名和组名转换为数字.
+注意:以上用到权限的地方都为数字.用字符串有时为引起歧义.如"0775"将会被认为是十进制775而不是八进制775.函数oct可强制把字符串认为是八进制,如oct("0775")正确.
+
+
+十三.字符串与排序
+查找子字符串
+$where=index($big,$small,$num);
+在$big串里从$num开始查找$small串首次出现的位置.无法找到返回-1.无第三个参数默认从0开始.rindex从最后出现的位置开始.
+截取字符串
+$part=substr($string,$position,$length); 
+第一个参数为字符串,第二个为从零算起的初始值,第三个为子字符串长度,返回值为子字符串.无第三参数表示一直取到字符串尾.
+格式化数据
+my $d=sprintf"%4d",$s;
+sprintf将返回格式化数据到变量中保存,而不是直接输出.
+高级排序
+建立排序子例程,定义自己想要的排序方式.
+排序子例程
+sub by_number {
+if($a<$b) {-1} elsif($a>$b) {1} esle {0}
+}
+my $result=sort by_number @some_numbers;
+子例程中的$a和$b不用声明,Perl内部已经实现.如果$a应该在$b之前,返回-1;如果$a应该在$b之后,返回1;如果顺序无关,返回0.
+宇宙飞船操作符 <=> 比较两边数值并且返回-1,0,1,依数值排序.
+sub by_number { $a<=>$b } 
+my $result=sort { $a<=>$b } @some_number;
+字符串比较操作符 cmp
+sub by { "\L$a" cmp "\L$b" }   #因为变量强制被转换为小写,所以该例程表示不区分大小写的排序.
+以值排序散列
+my %score=("ty"=>99,"point"=>87,"linuxty"=>71);
+my @winners=sort by_score keys %score;
+sub by_score { $score{$a}<=>$score{$b} }
+上述例子将按分数从小到大排序人名列表保存到数组@winners中.
+以多个键排序
+上例中如果分数一样,则按照人名排序.
+sub by_score_name { $score{$a}<=>$score{$b}  or  $a cmp $b }
+因为分数相等时第一个式子返回0假,就执行第二个式子对人名排序.
+
+
+十四.进程管理
+system函数
+启动一个子进程运行其他外部程序,正常返回时为0,不正常为非0,与大多数操作符刚好相反.
+当命令很简单时,一般不会启动shell;而当命令里出现奇怪的字符(如shell元字符,美元符号,分号竖线等),就会启动shell并交给她处理,一样以来,shell就是子进程,执行的命令就是孙进程.
+system "date";  #子进程将执行系统命令date,且继承Perl的标准输入,标准输出和标准错误.
+system 'for i in *;do cat $i; done';  #启动shell执行以上脚本.
+exec函数
+exec函数会使Perl自己去执行命令,不再返回;而system函数是让Perl暂停,创建子进程来执行命令.
+环境变量
+Perl环境变量保存在特殊散列%ENV里,当运行Perl时,会自动保存从父进程(一般为shell)继承来的变量.
+反引号
+反引号可使命令输出结果保存到变量中,而不是输出到标准输出.
+my $now=`date`;
+注意:与shell的区别是在Perl中不会移除最后的换行符.
+
+
+十五.perl模块
+Perl中的模块就像C语言中的函数库,提供了很多其他的功能.
+安装模块
+如果被安装模块使用了ExtUtils::MakeMaker模块来安装
+perl Makefile.PL
+make install
+如果被安装模块使用了Modile::Build模块来安装
+perl Bulid.PL
+./Build install
+使用模块
+以模块File::Basename为例
+如果要使用模块,首先申明,然后就可以使用模块里的函数
+use File::Basename;                 #申明
+my $name=basename "/etc/bin/perl";  #使用模块函数basename
+在申明的时候可以加上函数导入列表,没有导入的函数必须用全名.
+use File::Basename qw//;            #导入了空列表,所有函数都要用全名
+my $name=File::Basename::basename "/etc/bin/perl";  #使用了模块函数basename的全名
+
+
+十六.高级Perl技术
+捕捉错误
+把代码封装到块里,程序不会因一般的严重错误而崩溃,错误信息在$@变量中.
+{  };  注意最后必须有分号,是一个表达式.
+用grep选出项目
+grep操作符可以从列表中选出特定的项目,组成一个新的列表.
+选出1-1000中所有的奇数.
+my @numbers= grep { $_%2 } 1..1000;
+找出文件中满足条件的行
+my @file=grep { /\bty\b/ } <FILE>;
+当选择器为简单的表达式,可简写为
+my @file=grep /\bty\b/ , <FILE>;
+用map转换列表中的项目
+map操作符可以修改列表中的项目,返回一个新的列表.
+my @format_data=map { $_."\n" }  @data;  #列表中每个元素增加一个换行符
+注意:map将块表达式的结果作为结果列表的一部分;grep中块表达式的结果为真,就把元素加到新的列表里.
+    所以map一般用于修改每个元素的值;grep用于选取符合要求的元素,并不修改.
+    
+    
+    
+    [root@DW ~]# crontab -l
+50 23 * * * /etc/init.d/mysqld-ib restart > /dev/null
+
+0,30 * * * * perl /var/www/Ares/Spider/bin/do_diamond_ads.pl >/dev/null 2>&1
+
+#images
+#*/5 * * * * perl /var/www/Apollo/Spider/bin/do_tb_item_images.pl >/dev/null 2>&1
+#*/5 * * * * perl /var/www/Apollo/Spider/bin/do_tb_shop_images.pl >/dev/null 2>&1
+
+#删除log
+20 1 * * 6 perl /var/www/Apollo/Spider/script/delete_old_log.pl 2592000 >/dev/null 2>&1
+
+outputs a large anount of information about the current state of PHP.this includes information about php compilation options and extions the php vedion server information and environment if compiled as amodule the php environment os verdion information paths master and local vales of configuration options http headers and the php license 
+    beacause of every system is set up differently phpinfo is commonly used to check configuration settungs and for available predefind variables on a given system
+    outputs a large amount of information about the current state of php this includes information about php compilation options and extensions the php version server information and environment if compiled as  module the phpenvironment os version information paths master and local values of configuration options http headers and the php license perl#=== Author:	dong.yi
+#=== Start Date:	2013-4-16 14:22
+#=== Last updated:	2013-4-16 14:22
+#=== Author:	dong.yi
+#=== Start Date:	2013-4-16 14:23
+#=== Last updated:	2013-4-16 14:23
+##description:	
+##parameter:	
+##return:		
+#=== Modify Author:	dong.yi
+#=== Start Date:	2013-4-16 14:23
+#=== Last updated:	2013-4-16 14:23
